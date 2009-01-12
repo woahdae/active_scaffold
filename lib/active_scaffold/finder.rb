@@ -149,8 +149,12 @@ module ActiveScaffold
                          :joins => joins_for_finder,
                          :include => options[:count_includes]}
 
-      # NOTE: we must use :include in the count query, because some conditions may reference other tables
-      count = klass.count(finder_options.reject{|k,v| [:order].include? k})
+      count = if active_scaffold_config.unconditional_pagination 
+        klass.count
+      else
+        # we must use :include in the count query, because some conditions may reference other tables
+        klass.count(finder_options.reject{|k,v| [:order].include? k})
+      end
 
       finder_options.merge! :include => full_includes
 

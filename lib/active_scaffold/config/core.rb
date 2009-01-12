@@ -53,6 +53,8 @@ module ActiveScaffold::Config
     end
     @@ignore_columns = ActiveScaffold::DataStructures::Set.new
 
+    cattr_accessor :unconditional_pagination
+
     # instance-level configuration
     # ----------------------------
 
