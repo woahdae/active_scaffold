@@ -1,3 +1,4 @@
+require File.dirname(__FILE__) + '/active_scaffold/config/core'
 module ActiveScaffold
   class ControllerNotFound < RuntimeError; end
   class DependencyFailure < RuntimeError; end
