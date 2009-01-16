@@ -139,10 +139,17 @@ module ActiveScaffold
       end
 
       def active_scaffold_input_country(column, options)
-        priority = ["United States"]
         select_options = {:prompt => as_('- select -')}
         select_options.merge!(options)
-        country_select(:record, column.name, column.options[:priority] || priority, select_options, column.options)
+        if defined?(localized_country_select)
+          priority = column.options[:priority] || [:US]
+          localized_country_select(:record, column.name, priority, select_options, column.options)
+        elsif defined?(country_select)
+          priority = column.options[:priority] || ["United States"]
+          country_select(:record, column.name, priority, select_options, column.options)
+        else
+          raise "country_select is deprecated as of Rails 2.1.0. Install contry_select or localized_country_select as a plugin"
+        end
       end
 
       def active_scaffold_input_password(column, options)
@@ -235,7 +242,7 @@ module ActiveScaffold
           "form_hidden_attribute"
         end
       end
-
+      
       def subform_partial_for_column(column)
         if override_subform_partial?(column)
           override_subform_partial(column)
@@ -243,7 +250,7 @@ module ActiveScaffold
           "horizontal_subform"
         end
       end
-
+      
       ##
       ## Macro-level rendering decisions for columns
       ##
